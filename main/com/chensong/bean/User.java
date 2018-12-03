@@ -17,6 +17,26 @@ public class User {
 	private String country;
 	private boolean isVip;
 	
+	
+	
+	public User(int id, String userName, String password, String realName,
+			String telephone, char sex, int age, String address,
+			String country, boolean isVip) {
+		super();
+		this.id = id;
+		this.userName = userName;
+		this.password = password;
+		this.realName = realName;
+		this.telephone = telephone;
+		this.sex = sex;
+		this.age = age;
+		this.address = address;
+		this.country = country;
+		this.isVip = isVip;
+	}
+
+
+
 	public User(Builder builder){
 		id = builder.id;
 		userName = builder.userName;

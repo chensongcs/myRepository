@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	
+	
+	<!--注解扫描器-->
+	<context:component-scan base-package="com.chensong" />
+	<!-- 启动注解驱动 -->
+	<mvc:annotation-driven></mvc:annotation-driven>
+	
+	
+	<!-- 构造器注入：相当于调用对应的构造方法，参数对应 -->
+	<!-- 单例模式：scope="singleton"（默认） 
+		 非单例模式：scope="prototype"-->
+	<bean id="user" class="com.chensong.bean.User" scope="prototype">
+		<constructor-arg name="id" value="1"></constructor-arg>
+		<constructor-arg name="userName" value="夏天的风"></constructor-arg>
+		<constructor-arg name="password" value="123456"></constructor-arg>
+		<constructor-arg name="realName" value="李明"></constructor-arg>
+		<constructor-arg name="sex" value="男"></constructor-arg>
+		<constructor-arg name="age" value="28"></constructor-arg>
+		<constructor-arg name="address" value="上海"></constructor-arg>
+		<constructor-arg name="isVip" value="true"></constructor-arg>
+		<constructor-arg name="country" value="中国"></constructor-arg>
+		<constructor-arg name="telephone" value="13078879006"></constructor-arg>
+	</bean>
+	
+	
+	
+	<!-- set注入，使用property相当于调用对应的set方法，底层使用反射 -->
+	<bean id="student" class="com.chensong.bean.Student">
+		<property name="stuNo" value="2"></property>
+		<property name="stuName" value="zhangsan"></property>
+		<property name="stuAge" value="15"></property>
+	</bean>
+	
+	<!-- <bean id="teacher" class="com.chensong.bean.Teacher">
+		<property name="name" value="大海"></property>
+		<property name="age" value="30"></property>
+	</bean> -->
+	
+	<!-- p命名空间注入  p:age=""  p:age-ref="" -->
+	<bean id="teacher" class="com.chensong.bean.Teacher" p:name="大海" p:age="30"></bean>
+	
+	<!-- IOC容器赋值：如果是简单类型（8个基本加String）用value,如果是对象类型用ref -->
+	<bean id="course" class="com.chensong.bean.Course">
+		<property name="courseName" value="java"></property>
+		<property name="courseHour" value="20"></property>
+		<!-- 将teacher对象注入到course中 -->
+		<property name="teacher" ref="teacher"></property>
+	</bean>
+	
+	<!-- 各种集合类型的属性注入 -->
+	<bean id="collectionDemo" class="com.chensong.bean.AllCollectionType">
+		<!-- 通过set方式赋值 -->
+		<property name="list">
+			<list>
+				<value>足球1</value>
+				<value>篮球1</value>
+				<value>网球1</value>
+			</list>
+		</property>
+		<property name="array">
+			<array>
+				<value>足球2</value>
+				<value>篮球2</value>
+				<value>网球2</value>
+			</array>
+		</property>
+		<property name="set">
+			<set>
+				<value>足球3</value>
+				<value>篮球3</value>
+				<value>网球3</value>
+			</set>
+		</property>
+		<property name="map">
+			<map>
+				<entry>
+					<key>
+						<value>foot</value>
+					</key>
+					<value>足球4</value>
+				</entry>
+				<entry>
+					<key>
+						<value>basket</value>
+					</key>
+					<value>篮球4</value>
+				</entry>
+				<entry>
+					<key>
+						<value>tennis</value>
+					</key>
+					<value>网球4</value>
+				</entry>
+			</map>
+		</property>
+		<property name="props">
+			<props>
+				<prop key="foot2">足球5</prop>
+				<prop key="basket2">篮球5</prop>
+				<prop key="tennis2">网球5</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
