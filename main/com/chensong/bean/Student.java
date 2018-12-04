@@ -8,6 +8,8 @@ public class Student {
 	private int stuNo;
 	private String stuName;
 	private int stuAge;
+	private String address;
+	private String sex;
 	public int getStuNo() {
 		return stuNo;
 	}
@@ -27,8 +29,23 @@ public class Student {
 		this.stuAge = stuAge;
 	}
 	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+	
 	@Override
 	public String toString() {
-		return "stuNo:"+stuNo+" stuName:"+stuName+" stuAge:"+stuAge;
+		return "Student [stuNo=" + stuNo + ", stuName=" + stuName + ", stuAge="
+				+ stuAge + ", address=" + address + ", sex=" + sex + "]";
 	}
+	
 }

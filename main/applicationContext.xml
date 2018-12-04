@@ -4,18 +4,50 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.5.xsd"
+       default-autowire="byName">
+	   
 	
-	
-	<!--注解扫描器-->
+	<!--配置注解扫描器:spring在启动的时候，会根据base-package在该包中扫描所有类
+	查找这些类是否有注解，如果有，则加入IOC容器-->
 	<context:component-scan base-package="com.chensong" />
+	
+	
 	<!-- 启动注解驱动 -->
-	<mvc:annotation-driven></mvc:annotation-driven>
+	<mvc:annotation-driven/>
+	
+	
+	<!-- 配置数据库相关 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"></property>
+		<property name="username" value="system"></property>
+		<property name="password" value="CS680321cs"></property>
+		<property name="maxActive" value="10"></property>
+		<property name="maxIdle" value="6"></property>
+	</bean>
+	
+	
+	<!-- 配置事务管理器txManager -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
+	<!-- 增加对事务的支持 -->
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
 	
 	
 	<!-- 构造器注入：相当于调用对应的构造方法，参数对应 -->
@@ -39,8 +71,19 @@
 	<!-- set注入，使用property相当于调用对应的set方法，底层使用反射 -->
 	<bean id="student" class="com.chensong.bean.Student">
 		<property name="stuNo" value="2"></property>
-		<property name="stuName" value="zhangsan"></property>
+		<property name="stuName">
+			<!-- 特殊符号用<![CDATA[***]]> -->
+			<value>zhangsan<![CDATA[<>&]]></value>
+		</property>
 		<property name="stuAge" value="15"></property>
+		<property name="address">
+			<!-- 空字符串 -->
+			<value></value>
+		</property>
+		<property name="sex">
+			<!-- null -->
+			<null></null>
+		</property>
 	</bean>
 	
 	<!-- <bean id="teacher" class="com.chensong.bean.Teacher">
@@ -51,13 +94,21 @@
 	<!-- p命名空间注入  p:age=""  p:age-ref="" -->
 	<bean id="teacher" class="com.chensong.bean.Teacher" p:name="大海" p:age="30"></bean>
 	
+	
 	<!-- IOC容器赋值：如果是简单类型（8个基本加String）用value,如果是对象类型用ref -->
-	<bean id="course" class="com.chensong.bean.Course">
+	<bean id="course" class="com.chensong.bean.Course" autowire="byName">
 		<property name="courseName" value="java"></property>
 		<property name="courseHour" value="20"></property>
-		<!-- 将teacher对象注入到course中 -->
+		<!-- 将teacher对象注入到course中 
 		<property name="teacher" ref="teacher"></property>
+		-->
+		<!-- 自动装配：只适合引用类型，
+		byName:bean的id=类的属性名,且类型一致 
+		byType:bean的类型和类的属性类型一致
+		constructor:bean的类型(class)是否与该类的构造方法参数的类型一致
+		-->
 	</bean>
+	
 	
 	<!-- 各种集合类型的属性注入 -->
 	<bean id="collectionDemo" class="com.chensong.bean.AllCollectionType">
@@ -113,4 +164,16 @@
 			</props>
 		</property>
 	</bean>
+	
+	<!-- 配置前置通知:
+	1.配置方法所在类（注解方式）
+	2.配置前置通知类（注解方式）      切面:logBefore
+	3.将  “方法”  与      “通知类”   进行关联-->
+	<aop:config>
+		<!-- 配置切入点   （在哪里执行通知） -->
+		<aop:pointcut id="pointcut" expression="execution(public void com.chensong.service.impl.StudentServiceImpl.delStudentByNo(int)) or execution(public void com.chensong.service.impl.StudentServiceImpl.addStudent(com.chensong.bean.Student))" />
+		<!-- advisor:相当于连接切入点和切面的线 -->
+		<aop:advisor advice-ref="logBefore" pointcut-ref="pointcut"/>
+	</aop:config>
+	
 </beans>

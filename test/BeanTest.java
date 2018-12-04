@@ -4,6 +4,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.chensong.bean.AllCollectionType;
 import com.chensong.bean.Course;
+import com.chensong.bean.Student;
 import com.chensong.bean.User;
 
 
@@ -14,6 +15,9 @@ public class BeanTest {
 		User user2 = (User) ctx.getBean("user");
 		System.out.println(user);
 		System.out.println(user2);
+		
+		Student student = (Student) ctx.getBean("student");
+		System.out.println(student);
 		
 		Course course = (Course) ctx.getBean("course");
 		course.showInfo();
