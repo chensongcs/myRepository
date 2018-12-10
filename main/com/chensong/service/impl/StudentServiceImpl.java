@@ -22,10 +22,12 @@ public class StudentServiceImpl implements StudentService{
 			noRollbackFor=InterruptedException.class,
 			isolation=Isolation.READ_COMMITTED,
 			propagation=Propagation.REQUIRED)
-	public void addStudent(Student student) {
+	public boolean addStudent(Student student) {
 		//if(该学生是否存在)
 		//增加其他...
+		//studentDao = null;模拟异常通知
 		studentDao.addStudent(student);
+		return true;
 	}
 	
 	public void delStudentByNo(int stuNo){
