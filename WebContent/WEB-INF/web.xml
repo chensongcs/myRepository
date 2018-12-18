@@ -5,7 +5,26 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
 id="WebApp_ID" version="2.5">
   
-  <servlet>
+  
+  
+  <!-- 指定 IOC容器(applicationContext.xml)的位置-->
+  <context-param>
+  		<!-- 监听器的父类ContextLoader中有一个属性contextConfigLocation，该属性值保存着IOC容器的位置 -->
+  		<!-- 如果applicationContext.xml文件放在WEB-INF下，可以不用告诉它的位置 -->
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  
+  
+  
+  <!-- 配置spring-web.jar提供的监听器，此监听器可以在服务器启动时初始化IOC容器
+  		初始化IOC容器(applicationContext.xml),必须告诉监听器此容器的位置：
+  -->
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
+  <!-- <servlet>
   		<servlet-name>dispatcherServlet</servlet-name>
   		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
   		<init-param>
@@ -17,6 +36,6 @@ id="WebApp_ID" version="2.5">
   <servlet-mapping>
   		<servlet-name>dispatcherServlet</servlet-name>
   		<url-pattern>*.action</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping> -->
  
 </web-app>
