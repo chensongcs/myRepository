@@ -8,12 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chensong.bean.Student;
 import com.chensong.dao.StudentDao;
+import com.chensong.mapper.StudentMapper;
 import com.chensong.service.StudentService;
 
 @Service("studentService")
 public class StudentServiceImpl implements StudentService{
 	@Autowired
 	private StudentDao studentDao;
+	
+	@Autowired
+	private StudentMapper studentMapper;
 	/**
 	 * 通过注解实现事务，使addStudent方法中的方法全成功或全失败
 	 */
@@ -32,5 +36,11 @@ public class StudentServiceImpl implements StudentService{
 	
 	public void delStudentByNo(int stuNo){
 		studentDao.delStudentByNo(stuNo);
+	}
+	
+	public boolean addStudent2(Student student){
+		studentMapper.addStudent(student);
+		System.out.println("添加学生成功!!!");
+		return true;
 	}
 }

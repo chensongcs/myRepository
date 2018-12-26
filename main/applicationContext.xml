@@ -27,6 +27,11 @@
 	<!-- 启动注解驱动 -->
 	<mvc:annotation-driven/>
 	
+	<!-- 加载配置文件 -->
+	<bean id="propertiesConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:cs.properties"></property>
+	</bean>
+	
 	
 	<!-- 配置数据库相关 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
@@ -36,6 +41,21 @@
 		<property name="password" value="CS680321cs"></property>
 		<property name="maxActive" value="10"></property>
 		<property name="maxIdle" value="6"></property>
+	</bean>
+	
+	
+	<!--在SpringIoc容器中创建MyBatis的核心类SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 加载mapper.xml文件 -->
+		<property name="mapperLocations" value="com.chensong.mapper.*.xml"></property>
+	</bean>
+	
+	
+	<!--加载Dao层，basePackage下的所有接口都会动态生成一个实现类-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.chensong.mapper"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
 	
 	
@@ -70,7 +90,7 @@
 	
 	<!-- set注入，使用property相当于调用对应的set方法，底层使用反射 -->
 	<bean id="student" class="com.chensong.bean.Student">
-		<property name="stuNo" value="2"></property>
+		<property name="stuNo" value="1"></property>
 		<property name="stuName">
 			<!-- 特殊符号用<![CDATA[***]]> -->
 			<value>zhangsan<![CDATA[<>&]]></value>
