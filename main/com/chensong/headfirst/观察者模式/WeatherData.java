@@ -1,6 +1,7 @@
 package com.chensong.headfirst.观察者模式;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 public class WeatherData implements Subject{
 	private ArrayList observers;
@@ -43,4 +44,5 @@ public class WeatherData implements Subject{
 		this.pressure = pressure;
 		measurementsChanged();
 	}
+	
 }
